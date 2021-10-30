@@ -37,7 +37,7 @@ namespace AdventuresOfWilburApi.Domain
                 Console.WriteLine(scanResponse.Items.Count);
             } while (exclusiveStartKey.ContainsKey("ImageId"));
 
-            return scanResults.Select(item => new WilburCard(long.Parse(item["ImageId"].N), item["Title"].S, item["Description"].S, item["ImageKey"].S)).ToList();
+            return scanResults.Select(item => new WilburCard(long.Parse(item["ImageId"].N), item["Title"].S, item["Description"].S, item["ImageKey"].S)).OrderByDescending(x => x.Id).ToList();
         }
     }
 }
