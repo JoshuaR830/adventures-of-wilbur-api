@@ -22,14 +22,14 @@ namespace AdventuresOfWilburApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<WilburCard>> Get()
         {
-            await _dynamoDb.GetItemAsync(new GetItemRequest
-            {
-                TableName = "AdventuresOfWilburImageTable",
-                Key = new Dictionary<string, AttributeValue>
-                {
-                    {"ImageId", new AttributeValue{ N = "19" }}
-                }
-            });
+            // await _dynamoDb.GetItemAsync(new GetItemRequest
+            // {
+            //     TableName = "AdventuresOfWilburImageTable",
+            //     Key = new Dictionary<string, AttributeValue>
+            //     {
+            //         {"ImageId", new AttributeValue{ N = "19" }}
+            //     }
+            // });
 
             return new List<WilburCard>
             {
