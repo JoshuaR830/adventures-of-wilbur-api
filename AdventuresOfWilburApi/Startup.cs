@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdventuresOfWilburApi.Domain;
 using Amazon.DynamoDBv2;
 using Amazon.Extensions.NETCore.Setup;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,7 @@ namespace AdventuresOfWilburApi
             services.AddControllers();
             services.AddDefaultAWSOptions(new AWSOptions());
             services.AddAWSService<IAmazonDynamoDB>();
+            services.AddTransient<IWilburRepository, WilburRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "AdventuresOfWilburApi", Version = "v1"});
