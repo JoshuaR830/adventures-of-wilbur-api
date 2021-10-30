@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AdventuresOfWilburApi.Models;
@@ -22,14 +23,31 @@ namespace AdventuresOfWilburApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<WilburCard>> Get()
         {
-            // await _dynamoDb.GetItemAsync(new GetItemRequest
-            // {
-            //     TableName = "AdventuresOfWilburImageTable",
-            //     Key = new Dictionary<string, AttributeValue>
-            //     {
-            //         {"ImageId", new AttributeValue{ N = "19" }}
-            //     }
-            // });
+            try
+            {
+                await _dynamoDb.GetItemAsync(new GetItemRequest
+                {
+                    TableName = "AdventuresOfWilburImageTable",
+                    Key = new Dictionary<string, AttributeValue>
+                    {
+                        {"ImageId", new AttributeValue{ N = "19" }}
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                return new List<WilburCard>
+                {
+                    new WilburCard
+                    {
+                        Id = 19,
+                        Title = e.Message,
+                        Body = e.StackTrace,
+                        WilburImage = ""
+                    }
+                };
+            }
+            
 
             return new List<WilburCard>
             {
