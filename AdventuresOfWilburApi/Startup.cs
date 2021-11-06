@@ -19,6 +19,7 @@ namespace AdventuresOfWilburApi
 {
     public class Startup
     {
+        private readonly string MyAllowSpecificOrigins = "_MyAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,6 +30,16 @@ namespace AdventuresOfWilburApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins, builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
             services.AddControllers();
             services.AddDefaultAWSOptions(new AWSOptions());
             services.AddAWSService<IAmazonDynamoDB>();
@@ -52,6 +63,8 @@ namespace AdventuresOfWilburApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
