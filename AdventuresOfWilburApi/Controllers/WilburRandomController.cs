@@ -20,9 +20,13 @@ namespace AdventuresOfWilburApi.Controllers
         [HttpGet]
         public async Task<WilburCard> Get()
         {
-            await _wilburRepository.GetMostRecentIndex();
+            var max = await _wilburRepository.GetMostRecentIndex();
             var rand = new Random();
-            var selectedItem = rand.Next();
+
+            if (max > int.MaxValue)
+                max = int.MaxValue;
+
+            var selectedItem = rand.Next(1, Convert.ToInt32(max));
 
             var randomWilburCard = await _wilburRepository.GetById(selectedItem);
 
