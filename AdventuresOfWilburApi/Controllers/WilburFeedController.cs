@@ -6,6 +6,7 @@ using AdventuresOfWilburApi.Domain;
 using AdventuresOfWilburApi.Models;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdventuresOfWilburApi.Controllers
@@ -21,6 +22,7 @@ namespace AdventuresOfWilburApi.Controllers
             _wilburRepository = wilburRepository;
         }
 
+        [EnableCors("_MyAllowSpecificOrigins")]
         [HttpGet]
         public async Task<IEnumerable<WilburCard>> Get()
         {

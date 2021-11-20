@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AdventuresOfWilburApi.Domain;
 using AdventuresOfWilburApi.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdventuresOfWilburApi.Controllers
@@ -17,6 +18,7 @@ namespace AdventuresOfWilburApi.Controllers
             _wilburRepository = wilburRepository;
         }
 
+        [EnableCors("_MyAllowSpecificOrigins")]
         [HttpGet]
         public async Task<WilburCard> Get()
         {
