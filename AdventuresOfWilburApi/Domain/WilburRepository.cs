@@ -17,28 +17,12 @@ namespace AdventuresOfWilburApi.Domain
             _dynamoDb = dynamoDb;
         }
 
-        public async Task<IEnumerable<WilburCard>> GetMostRecent()
+        public async Task<WilburCard> GetMostRecent()
         {
-            // var queryResult = await _dynamoDb.QueryAsync(new QueryRequest
-            // {
-            //     KeyConditionExpression = "ImageId = :n",
-            //     ExpressionAttributeValues = new Dictionary<string, AttributeValue>
-            //     {
-            //         {":n", new AttributeValue { N = "300" }}
-            //     },
-            //     TableName = "AdventuresOfWilburImageTable",
-            //     ScanIndexForward = false,
-            //     Limit = 1
-            // });
-
-            var description = await _dynamoDb.DescribeTableAsync(new DescribeTableRequest
-            {
-                TableName = "AdventuresOfWilburImageTable"
-            });
-
-            return new[] {await GetById(await GetMostRecentIndex())};
-            
-            // return queryResult.Items.Select(item => new WilburCard(long.Parse(item["ImageId"].N), item["Title"].S, item["Description"].S, item["ImageKey"].S)).OrderByDescending(x => x.Id).ToList();
+            // Try to get a more recent one - maybe dynamo hasn't updated it's thing yet
+            return 
+                await GetById(await GetMostRecentIndex() + 1) ?? 
+                await GetById(await GetMostRecentIndex());
         }
 
         public async Task<long> GetMostRecentIndex()
@@ -68,7 +52,6 @@ namespace AdventuresOfWilburApi.Domain
 
                 scanResults.AddRange(scanResponse.Items.ToList());
                 exclusiveStartKey = scanResponse.LastEvaluatedKey;
-                Console.WriteLine(scanResponse.Items.Count);
             } while (exclusiveStartKey.ContainsKey("ImageId"));
 
             return scanResults.Select(item => new WilburCard(long.Parse(item["ImageId"].N), item["Title"].S, item["Description"].S, item["ImageKey"].S)).OrderByDescending(x => x.Id).ToList();
@@ -95,6 +78,11 @@ namespace AdventuresOfWilburApi.Domain
 
         public async Task<IEnumerable<WilburCard>> GetItemsForIdAndLimitNewestFirst(long itemId, long limit)
         {
+            // This should get the very latest Wilbur picture - even if dynamo hasn't updated it's table count
+            // By adding one each time it should ensure that if dynamo doesn't have the latest, that an image later isn't skipped because 1 will always be added
+            if (await GetById(await GetMostRecentIndex() + 1) != null)
+                itemId++;
+            
             var keys = new List<Dictionary<string, AttributeValue>>();
 
             if (itemId - limit < 1)

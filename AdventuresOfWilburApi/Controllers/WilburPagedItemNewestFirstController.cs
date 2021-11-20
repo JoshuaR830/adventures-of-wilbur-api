@@ -25,18 +25,11 @@ namespace AdventuresOfWilburApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<WilburCard>> Get([FromQuery] long page, [FromQuery] long limit)
         {
-            Console.WriteLine($"page {page}");
-            Console.WriteLine($"limit {limit}");
             var pxl = page * limit;
             page = (await _wilburRepository.GetMostRecentIndex()) - (pxl);
             
-            Console.WriteLine($"pxl {pxl}");
-            Console.WriteLine($"actual {page}");
-            
             var card = await _wilburRepository.GetItemsForIdAndLimitNewestFirst(page, limit);
 
-            Console.WriteLine(JsonSerializer.Serialize(card.Select(x => x.Id)));
-            
             return card;
         }
     }

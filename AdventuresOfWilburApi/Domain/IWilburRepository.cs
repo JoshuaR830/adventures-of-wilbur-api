@@ -7,7 +7,7 @@ namespace AdventuresOfWilburApi.Domain
 {
     public interface IWilburRepository
     {
-        Task<IEnumerable<WilburCard>> GetMostRecent();
+        Task<WilburCard> GetMostRecent();
         Task<long> GetMostRecentIndex();
         Task<IEnumerable<WilburCard>> GetAll();
         Task<WilburCard> GetById(long id);
