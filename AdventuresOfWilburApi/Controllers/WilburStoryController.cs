@@ -21,9 +21,9 @@ namespace AdventuresOfWilburApi.Controllers
         {
             // If null cope by returning the same item again
             if (isNext)
-                return await _wilburRepository.GetById(currentPage + 1) ?? await _wilburRepository.GetById(currentPage + 1);
+                return await _wilburRepository.GetById(currentPage + 1) ?? await _wilburRepository.GetById(currentPage);
             
-            return await _wilburRepository.GetById(currentPage - 1) ?? await _wilburRepository.GetById(currentPage + 1);
+            return await _wilburRepository.GetById(currentPage - 1) ?? await _wilburRepository.GetById(currentPage);
         }
     }
 }
