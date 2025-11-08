@@ -9,10 +9,7 @@ name: Deploy to Amazon ECS
 jobs:
   deploy:
     name: Deploy
-    runs-on:
-      - runs-on
-      - runner=1cpu-linux-arm64
-      - run-id=${{ github.run_id }}
+    runs-on: ubuntu-24.04-arm
     environment: production
 
     steps:
